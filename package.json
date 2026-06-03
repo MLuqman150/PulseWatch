@@ -1,0 +1,14 @@
+{
+  "name": "pulsewatch",
+  "description": "A website monitoring tool",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "workflow:backend": "npm run start:dev --workspace=apps/api",
+    "workflow:web": "npm run dev:web --workspace=apps/web"
+  },
+  "license": "ISC"
+}
