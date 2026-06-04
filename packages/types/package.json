@@ -1,11 +1,8 @@
 {
   "name": "@pulsewatch/types",
   "version": "1.0.0",
-  "description": "package for global types",
+  "description": "Shared types for PulseWatch",
   "license": "ISC",
   "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  "main": "src/index.ts"
 }

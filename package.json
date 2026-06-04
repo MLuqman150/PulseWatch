@@ -7,8 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "workflow:backend": "npm run start:dev --workspace=apps/api",
-    "workflow:web": "npm run dev:web --workspace=apps/web"
+    "workflow:api": "npm run start:dev --workspace=apps/api",
+    "workflow:web": "npm run dev --workspace=apps/web"
   },
   "license": "ISC"
 }
