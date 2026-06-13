@@ -6,7 +6,6 @@ import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtAuthGuard } from "./guards/jwt.guard";
 import "dotenv/config";
-
 @Module({
   imports: [
     PrismaModule,
