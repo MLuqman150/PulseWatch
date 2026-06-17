@@ -12,6 +12,7 @@ export class MonitoringService {
     private prisma: PrismaService,
   ) {}
 
+  // @Cron("*/10 * * * * *")
   @Cron("*/5 * * * *")
   async checkAllWebsites() {
     const websites = await this.prisma.website.findMany();
@@ -20,8 +21,6 @@ export class MonitoringService {
       const payload = { websiteId: website.id, url: website.url };
 
       await this.monitoringQueue.add("check-website", payload);
-
-      console.log(`Job added for ${website.url}`);
     }
   }
 }
