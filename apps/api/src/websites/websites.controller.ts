@@ -38,6 +38,22 @@ export class WebsitesController {
     return await this.websitesService.findAll(req.user.userId);
   }
 
+  @Get(":id/stats")
+  async getStats(
+    @Request() req: AuthenticatedRequest,
+    @Param("id") webId: string,
+  ) {
+    return this.websitesService.getStats(req.user.userId, webId);
+  }
+
+  @Get(":id/history")
+  async getHistory(
+    @Request() req: AuthenticatedRequest,
+    @Param("id") webId: string,
+  ) {
+    return this.websitesService.getHistory(req.user.userId, webId);
+  }
+
   @Delete(":id")
   async delete(
     @Request() req: AuthenticatedRequest,
