@@ -102,6 +102,8 @@ export class WebsitesService {
       },
     });
 
+    const avgResponseTime = avgRespTime._avg.responseTime ?? 0;
+
     const lastChecked = await this.prisma.websiteChecks.findFirst({
       where: { websiteId },
       orderBy: {
@@ -116,7 +118,7 @@ export class WebsitesService {
       totalChecks,
       totalUp,
       uptime,
-      avgRespTime,
+      avgResponseTime,
       lastChecked,
     };
   }
@@ -141,9 +143,7 @@ export class WebsitesService {
           gte: timeLimit,
         },
       },
-      include: {
-        website: true,
-      },
+      orderBy: { checkedAt: "asc" },
     });
 
     return {
