@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { showToast } from "nextjs-toast-notify";
 import axios from "axios";
-
+import { useAuth } from "@/lib/auth-context";
 
 interface LoginFormData {
     email: string
@@ -13,19 +13,21 @@ interface LoginFormData {
 }
 
 export default function LoginPage(){
-
+ 
     const {
         handleSubmit,
         register,
         formState: { errors, isSubmitting, isValid },
       } = useForm<LoginFormData>();
 
-      const router = useRouter();
+    const router = useRouter();
+  
+    const { login }= useAuth()  
 
-      const onSubmit = async (data: LoginFormData)=> {
+    const onSubmit = async (data: LoginFormData)=> {
         try{
             const resp = await axiosInstance.post("/auth/login", data);
-            localStorage.setItem("token", resp.data.access_token)
+            login(resp.data.access_token)
             showToast.success(resp.data.message,{
                 duration: 2000, 
                 position: "top-right",
