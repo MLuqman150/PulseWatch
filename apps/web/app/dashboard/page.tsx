@@ -89,6 +89,31 @@ export default function DashboardPage() {
         router.push("/login")
     }
 
+    const handleDelete = async (id: string) => {
+        try {
+            const resp = await axiosInstance.delete(`/websites/${id}`)
+            showToast.success(resp.data.message, {
+                duration: 2000,
+                position: "top-right",
+                transition: "bounceIn",
+                progress: true
+            });
+
+        } catch (e) {
+            const message = axios.isAxiosError(e)
+                ? e.response?.data?.message ?? "Something went wrong"
+                : "Something went wrong";
+            showToast.error(message, {
+                duration: 2000,
+                position: "top-right",
+                transition: "bounceIn",
+                progress: true
+            });
+        } finally {
+            fetchWebsites();
+        }
+    }
+
     return (
         <>
             <ProtectedRoutes>
@@ -120,6 +145,7 @@ export default function DashboardPage() {
                                 <th>ID</th>
                                 <th>Website</th>
                                 <th>Created At</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,6 +154,7 @@ export default function DashboardPage() {
                                     <td>{index + 1}</td>
                                     <td>{website.url}</td>
                                     <td>{new Date(website.createdAt).toLocaleDateString()}</td>
+                                    <td><button className="text-red-400" onClick={()=> {handleDelete(website.id)}}>Delete</button></td>
                                 </tr>
                             ))}
                         </tbody>
