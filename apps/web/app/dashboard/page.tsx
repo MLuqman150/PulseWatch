@@ -90,6 +90,9 @@ export default function DashboardPage() {
     }
 
     const handleDelete = async (id: string) => {
+        if (!window.confirm("Are you sure you want to delete this website?")) {
+            return
+        }
         try {
             const resp = await axiosInstance.delete(`/websites/${id}`)
             showToast.success(resp.data.message, {
@@ -154,7 +157,7 @@ export default function DashboardPage() {
                                     <td>{index + 1}</td>
                                     <td>{website.url}</td>
                                     <td>{new Date(website.createdAt).toLocaleDateString()}</td>
-                                    <td><button className="text-red-400" onClick={()=> {handleDelete(website.id)}}>Delete</button></td>
+                                    <td><button className="text-red-400 cursor-pointer hover:underline" onClick={()=> {handleDelete(website.id)}}>Delete</button></td>
                                 </tr>
                             ))}
                         </tbody>
