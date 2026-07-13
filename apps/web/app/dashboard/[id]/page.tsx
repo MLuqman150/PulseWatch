@@ -84,8 +84,7 @@ export default function WebsiteDetailPage() {
         router.push("/dashboard")
     }
 
-    useEffect(()=>{
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+    const fetchData = async () => {
         Promise.all([fetchStats(), fetchHistory()])
         .then(()=>{
             console.log(stats, history);
@@ -101,13 +100,58 @@ export default function WebsiteDetailPage() {
                 progress: true
             });
         });
-    },[id])
+    }
+
+    useEffect(()=>{
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchData();
+    },[])
+
+    useEffect(()=>{
+        const interval = setInterval(fetchData,  5 * 60 * 1000);
+        return () => clearInterval(interval);
+    },[])
 
 
     return (
         <ProtectedRoutes>
             <div>
                 <h1>Website Detail</h1>
+                <button onClick={handleLogout} className="cursor-pointer">Logout</button>
+                <button onClick={handleBack} className="cursor-pointer hover:underline">Back to Dashboard</button>
+                <div>
+                    <h2>Stats</h2>
+                    <p>Total Checks: {stats?.totalChecks}</p>
+                    <p>Total Up time: {stats?.totalUp}</p>
+                    <p>Up time: {stats?.uptime}</p>
+                    <p>Average Response Time: {stats?.avgResponseTime}</p>
+                    <p>Last Checked: {stats?.lastChecked?.toLocaleString()}</p>
+                </div>
+                <div>
+                    <h2>History</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>WebsiteID</th>
+                                <th>Status</th>
+                                <th>Response Time</th>
+                                <th>Last Checked</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {history?.history.map((element,index) => (
+                                <tr key={element.id}>
+                                    <td>{ index + 1 }</td>
+                                    <td>{element?.websiteId}</td>
+                                    <td>{element?.status}</td>
+                                    <td>{element?.responseTime}</td>
+                                    <td>{element?.checkedAt?.toLocaleString()}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </ProtectedRoutes>
     )
