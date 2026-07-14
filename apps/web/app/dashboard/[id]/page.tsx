@@ -23,10 +23,6 @@ interface websiteHistory {
     checkedAt: Date;
 }
 
-interface history {
-    history: websiteHistory[];
-}
-
 export default function WebsiteDetailPage() {
 
     const { logout } = useAuth();
@@ -37,12 +33,12 @@ export default function WebsiteDetailPage() {
     
     const [stats, setStats] = useState<stats | null>(null);
 
-    const [history, setHistory] = useState<history | null>(null);
+    const [history, setHistory] = useState<websiteHistory[]>([]);
 
     const fetchStats = async () => {
         try {
             const resp = await axiosInstance.get(`/websites/${id}/stats`);
-            setStats(resp?.data.stats);
+            setStats(resp?.data);
         }
         catch (e) {
             const message = axios.isAxiosError(e)
@@ -85,11 +81,10 @@ export default function WebsiteDetailPage() {
     }
 
     const fetchData = async () => {
-        Promise.all([fetchStats(), fetchHistory()])
-        .then(()=>{
-            console.log(stats, history);
-        })
-        .catch((e)=>{
+        try {
+            await Promise.all([fetchStats(), fetchHistory()])
+        }
+        catch(e){
             const message = axios.isAxiosError(e)
                 ? e.response?.data?.message ?? "Something went wrong"
                 : "Something went wrong";
@@ -99,7 +94,8 @@ export default function WebsiteDetailPage() {
                 transition: "bounceIn",
                 progress: true
             });
-        });
+        };
+        
     }
 
     useEffect(()=>{
@@ -125,7 +121,7 @@ export default function WebsiteDetailPage() {
                     <p>Total Up time: {stats?.totalUp}</p>
                     <p>Up time: {stats?.uptime}</p>
                     <p>Average Response Time: {stats?.avgResponseTime}</p>
-                    <p>Last Checked: {stats?.lastChecked?.toLocaleString()}</p>
+                    <p>Last Checked: {stats?.lastChecked ? new Date(stats.lastChecked).toLocaleString() : 'N/A'}</p>
                 </div>
                 <div>
                     <h2>History</h2>
@@ -140,13 +136,13 @@ export default function WebsiteDetailPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {history?.history.map((element,index) => (
+                            {history?.map((element,index) => (
                                 <tr key={element.id}>
                                     <td>{ index + 1 }</td>
                                     <td>{element?.websiteId}</td>
                                     <td>{element?.status}</td>
                                     <td>{element?.responseTime}</td>
-                                    <td>{element?.checkedAt?.toLocaleString()}</td>
+                                    <td>{element?.checkedAt ? new Date(element.checkedAt).toLocaleString() : 'N/A'}</td>
                                 </tr>
                             ))}
                         </tbody>

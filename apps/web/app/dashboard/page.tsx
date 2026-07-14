@@ -7,6 +7,7 @@ import { showToast } from "nextjs-toast-notify";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import Link from 'next/link'
 
 interface websiteUrl {
     url: string;
@@ -155,7 +156,11 @@ export default function DashboardPage() {
                             {websites.map((website, index) => (
                                 <tr key={website.id}>
                                     <td>{index + 1}</td>
-                                    <td>{website.url}</td>
+                                    <td>
+                                        <Link href={`/dashboard/${website.id}`}>
+                                            {website.url}
+                                        </Link>
+                                    </td>
                                     <td>{new Date(website.createdAt).toLocaleDateString()}</td>
                                     <td><button className="text-red-400 cursor-pointer hover:underline" onClick={()=> {handleDelete(website.id)}}>Delete</button></td>
                                 </tr>
