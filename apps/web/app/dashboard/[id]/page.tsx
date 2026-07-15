@@ -12,7 +12,11 @@ interface stats {
     totalUp: number,
     uptime: number,
     avgResponseTime: number,
-    lastChecked: Date,
+    lastChecked: {
+        checkedAt: string
+        status: string
+        responseTime: number | null
+    },
 }
 
 interface websiteHistory {
@@ -112,37 +116,39 @@ export default function WebsiteDetailPage() {
     return (
         <ProtectedRoutes>
             <div>
-                <h1>Website Detail</h1>
-                <button onClick={handleLogout} className="cursor-pointer">Logout</button>
-                <button onClick={handleBack} className="cursor-pointer hover:underline">Back to Dashboard</button>
+                <h1 className="text-lg font-bold p-4">Website Detail</h1>
+                <button onClick={handleLogout} className="cursor-pointer hover:underline">Logout</button>
                 <div>
+                    <button onClick={handleBack} className=" cursor-pointer hover:underline">Back to Dashboard</button>
+                </div>
+                <div className="py-2">
                     <h2>Stats</h2>
                     <p>Total Checks: {stats?.totalChecks}</p>
                     <p>Total Up time: {stats?.totalUp}</p>
                     <p>Up time: {stats?.uptime}</p>
                     <p>Average Response Time: {stats?.avgResponseTime}</p>
-                    <p>Last Checked: {stats?.lastChecked ? new Date(stats.lastChecked).toLocaleString() : 'N/A'}</p>
+                    <p>Last Checked: {stats?.lastChecked ? new Date(stats.lastChecked.checkedAt).toLocaleString() : 'N/A'}</p>
                 </div>
                 <div>
-                    <h2>History</h2>
+                    <h2 className="text-md font-bold p-2">History</h2>
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>WebsiteID</th>
-                                <th>Status</th>
-                                <th>Response Time</th>
-                                <th>Last Checked</th>
+                                <th className="p-2">ID</th>
+                                <th className="p-2">WebsiteID</th>
+                                <th className="p-2">Status</th>
+                                <th className="p-2">Response Time</th>
+                                <th className="p-2">Last Checked</th>
                             </tr>
                         </thead>
                         <tbody>
                             {history?.map((element,index) => (
-                                <tr key={element.id}>
-                                    <td>{ index + 1 }</td>
-                                    <td>{element?.websiteId}</td>
-                                    <td>{element?.status}</td>
-                                    <td>{element?.responseTime}</td>
-                                    <td>{element?.checkedAt ? new Date(element.checkedAt).toLocaleString() : 'N/A'}</td>
+                                <tr key={element.id} >
+                                    <td className="p-2">{ index + 1 }</td>
+                                    <td className="p-2">{element?.websiteId}</td>
+                                    <td className="p-2">{element?.status}</td>
+                                    <td className="p-2">{element?.responseTime}</td>
+                                    <td className="p-2">{element?.checkedAt ? new Date(element.checkedAt).toLocaleString() : 'N/A'}</td>
                                 </tr>
                             ))}
                         </tbody>

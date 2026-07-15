@@ -157,7 +157,7 @@ export default function DashboardPage() {
                                 <tr key={website.id}>
                                     <td>{index + 1}</td>
                                     <td>
-                                        <Link href={`/dashboard/${website.id}`}>
+                                        <Link href={`/dashboard/${website.id}`} className="hover:underline hover:text-red-500">
                                             {website.url}
                                         </Link>
                                     </td>
