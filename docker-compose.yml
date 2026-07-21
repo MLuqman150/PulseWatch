@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+    networks: 
+      - isolated
+  
+  api:
+    build: 
+      context: .
+      dockerfile: apps/api/Dockerfile
+    depends_on: 
+      - redis
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    
+    ports:
+      - '4000:4000'
+    networks: 
+      - isolated
+
+  web:
+    build: 
+      context: .
+      dockerfile: apps/web/Dockerfile
+    depends_on:
+      - api
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+    ports:
+      - '3000:3000'
+    networks: 
+      - isolated
+
+networks:
+  isolated:
+    driver: bridge  
+         
+    
+    
