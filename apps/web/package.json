@@ -9,12 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "axios": "^1.18.0",
     "next": "^16.2.9",
+    "nextjs-toast-notify": "^1.62.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "axios": "^1.18.0",
-    "nextjs-toast-notify": "^1.62.0",
-    "react-hook-form": "^7.80.0"
+    "react-hook-form": "^7.80.0",
+    "react-icons": "^5.7.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
