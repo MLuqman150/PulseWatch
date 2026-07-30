@@ -121,14 +121,14 @@ export default function DashboardPage() {
     return (
         <>
             <ProtectedRoutes>
-                <div className="flex items-center justify-center">
+                <div className="m-2 p-2 flex items-center justify-between bg-gray-100 rounded-4xl">
                     <h1 className="text-center text-xl font-semibold">Dashboard</h1>
-                    <button onClick={handleLogout} className=" my-2 bg-black p-2 text-white font-medium rounded-md cursor-pointer transition-colors duration-200 hover:bg-gray-800">Logout</button>
+                    <button onClick={handleLogout} className="m-2 bg-black p-2 text-white font-medium rounded-md cursor-pointer transition-colors duration-200 hover:bg-gray-800">Logout</button>
                 </div>
-                <div className="min-h-screen flex flex-col items-center justify-center">
+                <div className="my-2 min-h-screen flex flex-col items-center">
                     <form action="" method="POST" onSubmit={handleSubmit(onSubmit)}>
                         <div>
-                            <label htmlFor="url">Add Website</label>
+                            <label htmlFor="url" className="text-lg">Add Website</label>
                             <input
                                 {...register("url", { required: "Website url is required" })}
                                 type="text"
@@ -142,37 +142,46 @@ export default function DashboardPage() {
                                     {errors?.url?.message}
                                 </p>
                             )}
-                            <button 
-                                type="submit" 
-                                disabled={!isValid || isSubmitting}
-                                className="my-2 bg-black p-2 text-white font-medium rounded-md cursor-pointer transition-colors duration-200 hover:bg-gray-800"
-                            >
-                                Add
-                            </button>
+                            <div className="flex justify-end">
+                                <button 
+                                    type="submit" 
+                                    disabled={!isValid || isSubmitting}
+                                    className="my-2 bg-black p-2 text-white font-medium rounded-md cursor-pointer transition-colors duration-200 hover:bg-gray-800"
+                                >
+                                    Add
+                                </button>
+                            </div>
                         </div>
                     </form>
 
-                    <div className="flex"> 
-                        <table className="">
-                            <thead>
+                    <div className="w-full max-w-5xl mt-8 overflow-x-auto rounded-xl border border-gray-200 shadow-md"> 
+                        <table className="w-full border-collapse">
+                            <thead className="bg-gray-900 text-white">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Website</th>
-                                    <th>Created At</th>
-                                    <th>Actions</th>
+                                    <th className="px-6 py-3 text-left">ID</th>
+                                    <th className="px-6 py-3 text-left">Website</th>
+                                    <th className="px-6 py-3 text-left">Created At</th>
+                                    <th className="px-6 py-3 text-left">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
+                              {websites.length === 0 && (
+                                    <tr>
+                                        <td colSpan={4} className="text-center py-8 text-gray-500">
+                                            No websites added yet. Add your first website above.
+                                        </td>
+                                    </tr>
+                                )}
                                 {websites.map((website, index) => (
-                                    <tr key={website.id}>
-                                        <td>{index + 1}</td>
-                                        <td>
+                                    <tr className="border-b transition-colors" key={website.id}>
+                                        <td className="px-6 py-4">{index + 1}</td>
+                                        <td className="px-6 py-4">
                                             <Link href={`/dashboard/${website.id}`} className="hover:underline hover:text-red-500">
                                                 {website.url}
                                             </Link>
                                         </td>
-                                        <td>{new Date(website.createdAt).toLocaleDateString()}</td>
-                                        <td><button className="text-red-400 cursor-pointer hover:underline" onClick={()=> {handleDelete(website.id)}}>Delete</button></td>
+                                        <td className="px-6 py-4">{new Date(website.createdAt).toLocaleDateString()}</td>
+                                        <td className="px-6 py-4 text-center"><button className="my-2 bg-red-600 p-2 text-white font-medium rounded-md cursor-pointer transition-colors duration-200 hover:bg-red-400" onClick={()=> {handleDelete(website.id)}}>Delete</button></td>
                                     </tr>
                                 ))}
                             </tbody>
