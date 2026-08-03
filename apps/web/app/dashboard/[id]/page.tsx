@@ -115,9 +115,10 @@ export default function WebsiteDetailPage() {
 
     return (
         <ProtectedRoutes>
-            <div>
-                <h1 className="text-lg font-bold p-4">Website Detail</h1>
-                <button onClick={handleLogout} className="cursor-pointer hover:underline">Logout</button>
+                <div className="m-2 p-2 flex items-center justify-between bg-gray-100 rounded-4xl">
+                    <h1 className="text-center text-xl font-semibold">Website Detail</h1>
+                    <button onClick={handleLogout} className="m-2 bg-black p-2 text-white font-medium rounded-md cursor-pointer transition-colors duration-200 hover:bg-gray-800">Logout</button>
+                </div>
                 <div>
                     <button onClick={handleBack} className=" cursor-pointer hover:underline">Back to Dashboard</button>
                 </div>
@@ -129,32 +130,39 @@ export default function WebsiteDetailPage() {
                     <p>Average Response Time: {stats?.avgResponseTime}</p>
                     <p>Last Checked: {stats?.lastChecked ? new Date(stats.lastChecked.checkedAt).toLocaleString() : 'N/A'}</p>
                 </div>
-                <div>
+                <div className="w-full max-w-5xl mt-8 overflow-x-auto rounded-xl border border-gray-200 shadow-md">
                     <h2 className="text-md font-bold p-2">History</h2>
-                    <table>
-                        <thead>
+                    <table className="w-full border-collapse">
+                        <thead className="bg-gray-900 text-white">
                             <tr>
-                                <th className="p-2">ID</th>
-                                <th className="p-2">WebsiteID</th>
-                                <th className="p-2">Status</th>
-                                <th className="p-2">Response Time</th>
-                                <th className="p-2">Last Checked</th>
+                                <th className="px-6 py-3 text-left">ID</th>
+                                <th className="px-6 py-3 text-left">WebsiteID</th>
+                                <th className="px-6 py-3 text-left">Status</th>
+                                <th className="px-6 py-3 text-left">Response Time</th>
+                                <th className="px-6 py-3 text-left">Last Checked</th>
                             </tr>
                         </thead>
+        
                         <tbody>
+                            {history.length === 0 && (
+                                <tr>
+                                    <td colSpan={4} className="text-center py-8 text-gray-500">
+                                        No websites added yet. Add your first website above.
+                                    </td>
+                                </tr>
+                            )}
                             {history?.map((element,index) => (
-                                <tr key={element.id} >
-                                    <td className="p-2">{ index + 1 }</td>
-                                    <td className="p-2">{element?.websiteId}</td>
-                                    <td className="p-2">{element?.status}</td>
-                                    <td className="p-2">{element?.responseTime}</td>
-                                    <td className="p-2">{element?.checkedAt ? new Date(element.checkedAt).toLocaleString() : 'N/A'}</td>
+                                <tr className="border-b transition-colors" key={element.id} >
+                                    <td className="px-6 py-4">{ index + 1 }</td>
+                                    <td className="px-6 py-4">{element?.websiteId}</td>
+                                    <td className="px-6 py-4">{element?.status}</td>
+                                    <td className="px-6 py-4">{element?.responseTime}</td>
+                                    <td className="px-6 py-4">{element?.checkedAt ? new Date(element.checkedAt).toLocaleString() : 'N/A'}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-            </div>
         </ProtectedRoutes>
     )
 }
