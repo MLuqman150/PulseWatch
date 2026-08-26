@@ -21,6 +21,8 @@ export class MonitoringService {
       const payload = { websiteId: website.id, url: website.url };
 
       await this.monitoringQueue.add("check-website", payload);
+      console.log(`Added job to queue for website: ${website.url}`);
     }
+    console.log(`Added ${websites.length} jobs to queue`);
   }
 }

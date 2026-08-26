@@ -33,6 +33,7 @@ export class MonitoringProcessor extends WorkerHost {
           responseTime,
         },
       });
+      console.log(`Website checked: ${url} with status: ${status}`);
       return {
         message: "Website Checked",
         statusCheck: check,
@@ -45,6 +46,7 @@ export class MonitoringProcessor extends WorkerHost {
           status,
         },
       });
+      console.log(`Website down: ${url} with error: ${e}`);
       return {
         message: `Website down with error: ${e}`,
         statusCheck: check,

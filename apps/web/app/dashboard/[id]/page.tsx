@@ -120,48 +120,108 @@ export default function WebsiteDetailPage() {
                     <button onClick={handleLogout} className="m-2 bg-black p-2 text-white font-medium rounded-md cursor-pointer transition-colors duration-200 hover:bg-gray-800">Logout</button>
                 </div>
                 <div>
-                    <button onClick={handleBack} className=" cursor-pointer hover:underline">Back to Dashboard</button>
+                    <button onClick={handleBack} className=" cursor-pointer hover:underline hover:font-bold">Back to Dashboard</button>
                 </div>
-                <div className="py-2">
-                    <h2>Stats</h2>
-                    <p>Total Checks: {stats?.totalChecks}</p>
-                    <p>Total Up time: {stats?.totalUp}</p>
-                    <p>Up time: {stats?.uptime}</p>
-                    <p>Average Response Time: {stats?.avgResponseTime}</p>
-                    <p>Last Checked: {stats?.lastChecked ? new Date(stats.lastChecked.checkedAt).toLocaleString() : 'N/A'}</p>
-                </div>
-                <div className="w-full max-w-5xl mt-8 overflow-x-auto rounded-xl border border-gray-200 shadow-md">
-                    <h2 className="text-md font-bold p-2">History</h2>
-                    <table className="w-full border-collapse">
-                        <thead className="bg-gray-900 text-white">
-                            <tr>
-                                <th className="px-6 py-3 text-left">ID</th>
-                                <th className="px-6 py-3 text-left">WebsiteID</th>
-                                <th className="px-6 py-3 text-left">Status</th>
-                                <th className="px-6 py-3 text-left">Response Time</th>
-                                <th className="px-6 py-3 text-left">Last Checked</th>
-                            </tr>
-                        </thead>
-        
-                        <tbody>
-                            {history.length === 0 && (
+                <div className="flex items-center justify-center flex-col">
+                    <div className="w-full max-w-5xl mt-6">
+                        <div className="bg-white rounded-2xl border border-gray-200 shadow-md p-6">
+                            <h2 className="text-xl font-semibold mb-6">
+                                Stats
+                            </h2>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+
+                                {/* Total Checks */}
+                                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                                    <p className="text-sm text-gray-500">
+                                        Total Checks
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold">
+                                        {stats?.totalChecks ?? 0}
+                                    </p>
+                                </div>
+
+                                {/* Total Up */}
+                                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                                    <p className="text-sm text-gray-500">
+                                        Total Up
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold text-green-600">
+                                        {stats?.totalUp ?? 0}
+                                    </p>
+                                </div>
+
+                                {/* Uptime */}
+                                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                                    <p className="text-sm text-gray-500">
+                                        Uptime
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold">
+                                        {stats?.uptime ?? 0}%
+                                    </p>
+                                </div>
+
+                                {/* Response Time */}
+                                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                                    <p className="text-sm text-gray-500">
+                                        Avg. Response
+                                    </p>
+                                    <p className="mt-1 text-2xl font-bold">
+                                        {stats?.avgResponseTime.toFixed(0) ?? 0}
+                                        <span className="text-sm font-medium text-gray-500 ml-1">
+                                            ms
+                                        </span>
+                                    </p>
+                                </div>
+
+                                {/* Last Checked */}
+                                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                                    <p className="text-sm text-gray-500">
+                                        Last Checked
+                                    </p>
+                                    <p className="mt-1 text-sm font-semibold">
+                                        {stats?.lastChecked
+                                            ? new Date(
+                                                stats.lastChecked.checkedAt
+                                            ).toLocaleString()
+                                            : "N/A"}
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full max-w-5xl mt-8 overflow-x-auto rounded-xl border border-gray-200 shadow-md">
+                        <h2 className="text-md font-bold p-2">History</h2>
+                        <table className="w-full border-collapse">
+                            <thead className="bg-gray-900 text-white">
                                 <tr>
-                                    <td colSpan={4} className="text-center py-8 text-gray-500">
-                                        No websites added yet. Add your first website above.
-                                    </td>
+                                    <th className="px-6 py-3 text-left">ID</th>
+                                    <th className="px-6 py-3 text-left">Status</th>
+                                    <th className="px-6 py-3 text-left">Response Time</th>
+                                    <th className="px-6 py-3 text-left">Last Checked</th>
                                 </tr>
-                            )}
-                            {history?.map((element,index) => (
-                                <tr className="border-b transition-colors" key={element.id} >
-                                    <td className="px-6 py-4">{ index + 1 }</td>
-                                    <td className="px-6 py-4">{element?.websiteId}</td>
-                                    <td className="px-6 py-4">{element?.status}</td>
-                                    <td className="px-6 py-4">{element?.responseTime}</td>
-                                    <td className="px-6 py-4">{element?.checkedAt ? new Date(element.checkedAt).toLocaleString() : 'N/A'}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+            
+                            <tbody>
+                                {history.length === 0 && (
+                                    <tr>
+                                        <td colSpan={4} className="text-center py-8 text-gray-500">
+                                            No checks recorded in the last 24 hours.
+                                        </td>
+                                    </tr>
+                                )}
+                                {history?.map((element,index) => (
+                                    <tr className="border-b transition-colors" key={element.id} >
+                                        <td className="px-6 py-4">{ index + 1 }</td>
+                                        <td className="px-6 py-4">{element?.status === "UP" ? <span className="text-green-500">UP</span> : element?.status === "DOWN" ? <span className="text-red-500">DOWN</span> : <span className="text-yellow-500">DEGRADED</span>}</td>
+                                        <td className="px-6 py-4">{element?.responseTime ? `${element?.responseTime} ms` : 'N/A'}</td>
+                                        <td className="px-6 py-4">{element?.checkedAt ? new Date(element.checkedAt).toLocaleString() : 'N/A'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
         </ProtectedRoutes>
     )
