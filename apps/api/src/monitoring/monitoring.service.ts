@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { Queue } from "bullmq";
 import { InjectQueue } from "@nestjs/bullmq";
 import { PrismaService } from "../prisma/prisma.service";
@@ -7,6 +7,7 @@ import { Cron } from "@nestjs/schedule";
 // scheduler (adds jobs to the queue)
 @Injectable()
 export class MonitoringService {
+  private readonly logger = new Logger(MonitoringService.name);
   constructor(
     @InjectQueue("website-monitoring") private monitoringQueue: Queue,
     private prisma: PrismaService,
@@ -21,8 +22,8 @@ export class MonitoringService {
       const payload = { websiteId: website.id, url: website.url };
 
       await this.monitoringQueue.add("check-website", payload);
-      console.log(`Added job to queue for website: ${website.url}`);
+      this.logger.log(`Added job to queue for website: ${website.url}`);
     }
-    console.log(`Added ${websites.length} jobs to queue`);
+    this.logger.log(`Added ${websites.length} jobs to queue`);
   }
 }

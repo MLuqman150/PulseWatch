@@ -1,9 +1,9 @@
-// import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Job } from "bullmq";
 import { Processor, WorkerHost } from "@nestjs/bullmq";
 import axios from "axios";
 import { WebsiteStatus } from "@prisma/client";
+import { Logger } from "@nestjs/common";
 
 type webData = {
   websiteId: string;
@@ -13,6 +13,7 @@ type webData = {
 // processor (handles jobs)
 @Processor("website-monitoring")
 export class MonitoringProcessor extends WorkerHost {
+  private readonly logger = new Logger(MonitoringProcessor.name);
   constructor(private prisma: PrismaService) {
     super();
   }
@@ -21,7 +22,8 @@ export class MonitoringProcessor extends WorkerHost {
     const { websiteId, url } = job.data as webData;
     try {
       const startTime = Date.now();
-      await axios.get(url, { timeout: 10000 });
+      const normalizedUrl = url.startsWith("http") ? url : `https://${url}`;
+      await axios.get(normalizedUrl, { timeout: 10000 });
       const responseTime = Date.now() - startTime;
       const status: WebsiteStatus =
         responseTime < 2000 ? WebsiteStatus.UP : WebsiteStatus.DEGRADED;
@@ -33,7 +35,7 @@ export class MonitoringProcessor extends WorkerHost {
           responseTime,
         },
       });
-      console.log(`Website checked: ${url} with status: ${status}`);
+      this.logger.log(`Website checked: ${url} with status: ${status}`);
       return {
         message: "Website Checked",
         statusCheck: check,
@@ -46,7 +48,7 @@ export class MonitoringProcessor extends WorkerHost {
           status,
         },
       });
-      console.log(`Website down: ${url} with error: ${e}`);
+      this.logger.error(`Website down: ${url} with error: ${e}`);
       return {
         message: `Website down with error: ${e}`,
         statusCheck: check,
